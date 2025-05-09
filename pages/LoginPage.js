@@ -1,5 +1,4 @@
 const BasePage = require('./BasePage');
-
 class LoginPage extends BasePage {
 
 
@@ -37,118 +36,25 @@ class LoginPage extends BasePage {
         await expect(loginbutton).toBeDisplayed();
         await loginbutton.click();  // ✅ Fix: Ensure correct variable name
     }
-    
-    async dashBoardPage() {
-        const letsStartHeading = await $("//h5[@class='mb-0']");
+
+    async storePage() {
+        const letsStartHeading = await $("//div[@class='title' and normalize-space(text())='Select a shop']");
         await expect(letsStartHeading).toBeDisplayed();
     }
 
+    async selectstore(storeName) {
+        const xpath = `//div[normalize-space(text())='${storeName}']`;
+        const selectstore = await $(xpath);
+        await expect(selectstore).toBeDisplayed();
+        await selectstore.click();
+    }
 
+    async dashBoardPage() {
+        const letsStartHeading = await $("//div[@class='welcome-title' and contains(normalize-space(text()), 'Welcome')]");
+        await expect(letsStartHeading).toBeDisplayed();
+    }
     
-    async profileSettingBtn() {
-        const settingsLocator = await $('//img[@alt="profile"]');
-        // await $(settingsLocator).waitForDisplayed({ timeout: 5000 }); // Ensure element is visible
-        await settingsLocator.click(); // Click on the settings button
-    }
-
-    async LogoutBtn() {
-        const logoutbtnLocator = await $('//a[text()[normalize-space()="Logout"]]');
-        await $(logoutbtnLocator).click();
-    }
-
-    async LogInToYourAccountText() {
-        const LogInToYourAccountText = await $("//div[contains(text(), 'Login to your account')]");
-        await expect(LogInToYourAccountText).toBeDisplayed();
-    }
-
-
-    //Add product
-    async addProductbtn() {
-        const addProductButton = await $("//button[contains(@class, 'btn-primary') and text()='Add product']");
-        await expect(addProductButton).toBeDisplayed();
-        await addProductButton.click();  // ✅ Fix: Ensure correct variable name
-    }
-
-
-    async enterPrice(price) {
-        const priceInput = await $("//input[@id='price']");
-        await priceInput.setValue(price);
-    }
-
-    async enterComparePrice(compareprice) {
-        const comparePriceInput = await $("//input[@name='compare_at_price']");
-        await comparePriceInput.setValue(compareprice);
-    }
-
-
-    async saveProductBtn() {
-        const saveProductBtnLocator = await $("//button[contains(@class, 'btn-primary') and text()='Save product']");
-        await $(saveProductBtnLocator).click();
-    }
-
-
-    async SKUFieldRequiredText() {
-        const SKUfieldText = await $("//div[contains(@class, 'alert-content') and contains(text(), 'The SKU field is required')]");
-        await expect(SKUfieldText).toBeDisplayed();
-    }
-
-    async enterShirtTitle(shirttitle) {
-        const shirtTitleInput = await $("//input[@name='title']");
-        await shirtTitleInput.setValue(shirttitle);
-    }
-
-    async entersalesPagetext(salesPagetext) {
-        const salePageInput = await $("//input[@id='sales_page']");
-        await salePageInput.setValue(salesPagetext);
-    }
-
-    async enterVSLText(VSLText) {
-        const VslInput = await $("//input[@name='vsl']");
-        await VslInput.setValue(VSLText);
-    }
-
-
-    async checkBoxBtn() {
-        const checkbox = await $('//input[@id="enable_multiple_currencies"]');
-        await checkbox.click();
-
-    }
-
-    // async selectSupplier(supplierName) {
-    //     const supplierDropdown = await $("//select[@name='supplier']"); // Locate dropdown
-    //     await supplierDropdown.click(); // Click to open dropdown
-    //     await supplierDropdown.selectByVisibleText(supplierName); // Select supplier
-    // }
-
-
-
-    async enterProductPurposeText(purposeText) {
-        const productPurposeInput = await $("//input[@id='purpose']");
-        await productPurposeInput.setValue(purposeText);
-    }
-
-    async enterReturnAddressText(returnaddressText) {
-        const returnaddressTextInput = await $("//input[@id='return_center_address']");
-        await returnaddressTextInput.setValue(returnaddressText);
-    }
-
-
-
-    async CompliancescriptText() {
-        const ScriptText = await $("//div[contains(@class, 'alert alert-warning') and contains(text(), 'You must validate the compliance script')]");
-        await expect(ScriptText).toBeDisplayed();
-    }
-
-
-    async ValidateButton() {
-        const ValidateButtonLocator = await $('//button[@data-action="validate-script"]');
-        await $(ValidateButtonLocator).click();
-    }
-
-    async scriptMissingalerttext() {
-        const scriptAlertText = await $("//div[contains(@class, 'alert-content') and contains(text(), 'Some scripts are missing')]");
-        await expect(scriptAlertText).toBeDisplayed();
-    }
+    
 
 
 

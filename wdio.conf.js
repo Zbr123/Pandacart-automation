@@ -19,8 +19,6 @@ exports.config = {
         acceptInsecureCerts: true,
     }],
 
-    
-
     // Log level
     logLevel: 'info',
 
