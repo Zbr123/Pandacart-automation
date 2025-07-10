@@ -49,6 +49,7 @@ class DashboardPage extends BasePage {
         const fieldMapping = {
             title: 'input[name="title"]',
             price: 'input[name="price"]',
+            access_inst: 'textarea[name="access_instructions"]',
             compare_price: 'input[name="compare_at_price"]',
             sku: 'input[name="sku"]',
             barcode: 'input[name="barcode"]'

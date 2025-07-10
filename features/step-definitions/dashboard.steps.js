@@ -23,20 +23,20 @@ Then("I click on Physical product option", async () => {
     await dashboardPage.clickPhysicalProductOption(); 
 });
 
-Then("I fill the product form with the following data:", async (dataTable) => {
-    for (const { field, value } of dataTable.hashes()) {
-      await dashboardPage.fillProductField(field, value);
-    }
-  });
+// Then("I fill the product form with the following data:", async (dataTable) => {
+//     for (const { field, value } of dataTable.hashes()) {
+//       await dashboardPage.fillProductField(field, value);
+//     }
+//   });
   
 
-  Then("I click on the Save product button", async () => {
-    await dashboardPage.clickSaveProductButton();
-});
+//   Then("I click on the Save product button", async () => {
+//     await dashboardPage.clickSaveProductButton();
+// });
 
-Then("I click on All Products from the sidebar", async () => {
-    await dashboardPage.clickAllProductsLink();
-});
+// Then("I click on All Products from the sidebar", async () => {
+//     await dashboardPage.clickAllProductsLink();
+// });
 
 Then("I should see the Product Page heading", async () => {
     await dashboardPage.verifyProductSearchInputVisible();
