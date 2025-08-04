@@ -17,6 +17,14 @@ exports.config = {
         maxInstances: 1,
         browserName: 'chrome',
         acceptInsecureCerts: true,
+        'goog:chromeOptions': {
+            args: [
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-web-security',
+                '--disable-features=VizDisplayCompositor'
+            ]
+        }
     }],
 
     // Log level
@@ -56,11 +64,21 @@ exports.config = {
     baseUrl: 'https://accounts.staging.cartpanda.com/login',
 
     // Hooks for better debugging
-
-    
+    beforeSession: async function (capabilities, specs) {
+        // Set custom headers if needed for staging environment
+        console.log('Setting up session with custom headers...');
+    },
 
     beforeScenario: async function (world) {
         console.log(`Running scenario: ${world.pickle.name}`);
+        
+        // Set custom headers for each scenario if needed
+        await browser.setWindowSize(1920, 1080);
+        
+        // Add custom headers if required by the staging environment
+        // await browser.execute(() => {
+        //     // Add any required headers here
+        // });
     },
 
     afterScenario: async function (world, result) {
