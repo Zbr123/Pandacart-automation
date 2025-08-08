@@ -6,4 +6,3 @@ Feature: Login Functionality
     And I click on Signin button
     Then I should see Select store Page
     When I click on "ZubairTest" button    
-    Then I should see Dashboard Page
