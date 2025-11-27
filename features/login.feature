@@ -7,9 +7,9 @@
 #     Then I should see Select store Page
 #     When I click on "ZubairTest" button    
 #     Then I should see Dashboard Page
-#     # When I click On Profile button
-#     # And I click on Logout button
-#     # Then I should see log into your account text
+ When I click On Profile button
+ And I click on Logout button
+ Then I should see log into your account text
 
 
 #   # Scenario: Error message appears when adding a product without a title

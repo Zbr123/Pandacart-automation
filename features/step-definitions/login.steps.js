@@ -34,6 +34,10 @@ Given("I am on the login page", async () => {
         throw error;
     }
 });
+// Given("I handle Cloudflare verification", async () => {
+//     console.log("🔍 Checking for Cloudflare...");
+//     await LoginPage.handleCloudflareVerification();
+// });
 
 
 
@@ -51,12 +55,12 @@ When("I enter {string} in password field", async (password) => {
 
 When("I click on Signin button", async () => {
     await LoginPage.SignInBtn();
-    await browser.pause(10000);
+    await browser.pause(2000);
 });
 
 Then("I should see Select store Page", async () => {
     await LoginPage.storePage();
-    await browser.pause(5000);
+    await browser.pause(2000);
 });
 
 When("I click on {string} button", async (store) => {

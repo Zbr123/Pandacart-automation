@@ -1,14 +1,10 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Before,Given, When, Then } = require('@cucumber/cucumber');
 const LoginPage = require('../../pages/LoginPage');
 const DashboardPage = require('../../pages/DashboardPage');
 const CollectionPage = require('../../pages/CollectionPage');
 
-// Instantiate page objects
-
 const dashboardPage = new DashboardPage();
 const collectionPage = new CollectionPage();
-
-
 
 Then('I click on Collections', async () => {
     await collectionPage.clickCollections();
@@ -31,7 +27,8 @@ Then('I click on the smart collection radio button',async()=>{
       await collectionPage.clickonSmarthCollectionOption();
 });
 
-When('I click on the save collection buttion', async () => {
+
+When('I click on the save collection button', async () => {
     await collectionPage.clickSaveCollection();
 });
 

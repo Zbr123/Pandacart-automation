@@ -1,18 +1,12 @@
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config(); // ✅ Load environment variables
-
+require('dotenv').config(); // Load environment variables
+const allure = require('@wdio/allure-reporter').default;
 exports.config = {
     runner: 'local',
-
-    
     path: '/',
-    port: 9515, // Default WebDriver port for ChromeDriver
-
-    // Define the test specs (Feature files location)
-    specs: ['./features/**/*.feature'], // Ensure feature files are inside `features/`
-
-    // Browser capabilities
+    port: 9515,
+    specs: ['./features/**/*.feature'],
     capabilities: [{
         maxInstances: 1,
         browserName: 'chrome',
@@ -26,27 +20,27 @@ exports.config = {
             ]
         }
     }],
-
-    // Log level
     logLevel: 'info',
-
-    // Services (Ensure chromedriver is installed via `npm i --save-dev chromedriver`)
-    services: ['chromedriver'], 
-
-    // Framework configuration
+    services: ['chromedriver'],
     framework: 'cucumber',
-
-    // Reporters
-    reporters: ['spec'],
-
-    // Ensure WDIO explicitly loads the correct step definition files
+    // --------------------------
+    // Allure Reporter
+    // --------------------------
+    reporters: [
+        'spec',
+        ['allure', {
+            outputDir: 'allure-results',
+            disableWebdriverStepsReporting: true,
+            disableWebdriverScreenshotsReporting: false,
+            useCucumberStepReporter: true
+        }]
+    ],
     cucumberOpts: {
         require: fs.readdirSync(path.join(__dirname, './features/step-definitions'))
-            .filter(file => file.endsWith('.js')) // Load only .js step definition files
-            .map(file => path.join(__dirname, './features/step-definitions', file)), // Convert to absolute path
+            .filter(file => file.endsWith('.js'))
+            .map(file => path.join(__dirname, './features/step-definitions', file)),
         timeout: 60000,
         ignoreUndefinedDefinitions: false,
-
         backtrace: false,
         requireModule: [],
         dryRun: false,
@@ -54,35 +48,37 @@ exports.config = {
         format: ['pretty'],
         snippets: true,
         source: true,
-        strict: true, // Ensures undefined steps are flagged
-        tagExpression: '', // Run all tests
-        timeout: 60000,
-        ignoreUndefinedDefinitions: false, // Ensures undefined steps cause failure
+        strict: true,
+        tagExpression: '',
     },
-
-    // Base URL for the tests
     baseUrl: 'https://accounts.staging.cartpanda.com/login',
-
-    // Hooks for better debugging
-    beforeSession: async function (capabilities, specs) {
-        // Set custom headers if needed for staging environment
-        console.log('Setting up session with custom headers...');
-    },
-
+    // --------------------------
+    // Hooks
+    // --------------------------
     beforeScenario: async function (world) {
         console.log(`Running scenario: ${world.pickle.name}`);
-        
-        // Set custom headers for each scenario if needed
         await browser.setWindowSize(1920, 1080);
-        
-        // Add custom headers if required by the staging environment
-        // await browser.execute(() => {
-        //     // Add any required headers here
-        // });
     },
-
+    afterStep: async function (step, context, { error }) {
+        // Screenshot on failure
+        if (error) {
+            const screenshot = await browser.takeScreenshot();
+            allure.addAttachment('Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+        }
+    },
     afterScenario: async function (world, result) {
         console.log(`Scenario completed with status: ${result.status}`);
+        // Optional: Screenshot at the end of every scenario (even if passed)
+        const screenshot = await browser.takeScreenshot();
+        allure.addAttachment('End of Scenario Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+    },
+    // Add environment info to Allure report
+    onComplete: function () {
+        const allureEnvPath = path.resolve('./allure-results/environment.properties');
+        const envData =
+            `BROWSER=Chrome\n` +
+            `ENVIRONMENT=Staging\n` +
+            `BASE_URL=${this.baseUrl}\n`;
+        fs.writeFileSync(allureEnvPath, envData);
     }
 };
-

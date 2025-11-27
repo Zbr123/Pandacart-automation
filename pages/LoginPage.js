@@ -54,7 +54,30 @@ class LoginPage extends BasePage {
         await expect(letsStartHeading).toBeDisplayed();
     }
     
-    
+//    async handleCloudflareVerification() {
+//     try {
+//         // Look for Cloudflare challenge messages
+//         const cfMessage = await $(
+//             "//h1[contains(text(),'Verify') or contains(text(),'moment') or contains(text(),'Checking')]"
+//         );
+
+//         if (await cfMessage.isDisplayed()) {
+//             console.log("🛑 Cloudflare challenge detected — waiting for it to finish...");
+
+//             // Wait for Cloudflare to auto-verify (usually 5–8 sec)
+//             await browser.pause(8000);
+
+//             // Reload login page once after verification
+//             await browser.url(browser.options.baseUrl);
+
+//             console.log("🔁 Retrying login page after Cloudflare...");
+//         }
+//     } catch (error) {
+//         // No Cloudflare, continue silently
+//     }
+// }
+
+
 
 
 
