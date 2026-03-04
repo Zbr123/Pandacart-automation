@@ -86,7 +86,7 @@ Then("I should see log into your account text", async () => {
 
 Then("I should see Dashboard Page", async () => {
     await LoginPage.dashBoardPage();
-    await browser.pause(5000);
+    await browser.pause(7000);
 });
 
 

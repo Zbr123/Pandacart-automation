@@ -11,6 +11,12 @@ class DashboardPage extends BasePage {
         await productLink.click();
     }
 
+    async clickCrossButton() {
+        const crossButtons = await $('//span[@class="cc-1y9m6 cc-orziz"]');
+        await crossButtons.waitForDisplayed({ timeout: 10000 });
+        await crossButtons.click();
+    }
+
     async clickAllProducts() {
         const allProducts = await $("//span[normalize-space(text())='All products' and contains(@class, 'dropdown-link')]");
         await allProducts.waitForDisplayed({ timeout: 10000 });

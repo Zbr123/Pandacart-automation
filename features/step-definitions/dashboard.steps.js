@@ -4,9 +4,11 @@ const dashboardPage = new DashboardPage();
 
 Then("I click on Product btn in sidebar", async () => {
     await dashboardPage.clickProductsButton(); 
-    await browser.pause(10000);
+    await browser.pause(4000);
 });
-
+Then("I click on cross button from the Support Icon", async () => {
+    await dashboardPage.clickCrossButton(); 
+});
 Then("I click on All Products", async () => {
     await dashboardPage.clickAllProducts();
 });
@@ -22,6 +24,7 @@ Then("I click on Add Product button", async () => {
 Then("I click on Physical product option", async () => {
     await dashboardPage.clickPhysicalProductOption(); 
 });
+
 
 // Then("I fill the product form with the following data:", async (dataTable) => {
 //     for (const { field, value } of dataTable.hashes()) {

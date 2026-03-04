@@ -1,0 +1,17 @@
+field,value
+contact first name,John
+contact last name,Doe
+email,john.doe@test.com
+contact phone,5511999999999
+address first name,John
+address last name,Doe
+company,CoVentech
+cpf,12345678900
+address line 1,Street 123
+address line 2,Apt 10
+city,Sao Paulo
+state,SP
+zip,01000
+address phone,5511888888888
+notes,Smoke test user
+tags,"VIP, test"
