@@ -50,7 +50,7 @@ class LoginPage extends BasePage {
     }
 
     async dashBoardPage() {
-        const letsStartHeading = await $("//div[@class='welcome-title' and contains(normalize-space(text()), 'Welcome')]");
+        const letsStartHeading = await $("//h4[contains(@class,'mb-3') and contains(normalize-space(),'Welcome to Cartpanda')]");
         await expect(letsStartHeading).toBeDisplayed();
     }
     

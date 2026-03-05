@@ -1,1 +1,1 @@
-{"total":3,"items":[{"uid":"d6d97ee980a2441bf0e3d60c3798bfd6","name":"Subscription Plan Creation","statistic":{"failed":0,"broken":2,"skipped":0,"passed":1,"unknown":0,"total":3}},{"uid":"e0130cc7be0fff99049c19cb0835975f","name":"Upsell Offer Creation","statistic":{"failed":0,"broken":0,"skipped":0,"passed":3,"unknown":0,"total":3}},{"uid":"d420e6a1d756754f4b0245bea10b20e2","name":"Collection Functionality","statistic":{"failed":0,"broken":0,"skipped":0,"passed":2,"unknown":0,"total":2}}]}
+{"total":0,"items":[]}
