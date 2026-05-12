@@ -1,35 +1,72 @@
-require('dotenv').config();
-const { sendSlack } = require('./utils/slackNotifier');
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config(); // Load environment variables
+const allure = require('@wdio/allure-reporter').default;
 
 exports.config = {
+    //
+    // ====================
+    // Runner Configuration
+    // ====================
     runner: 'local',
-
+    path: '/',  // DevTools protocol uses '/'
     specs: ['./features/**/*.feature'],
+    maxInstances: 1,
 
+    //
+    // ==================
+    // Capabilities
+    // ==================
     capabilities: [{
         maxInstances: 1,
         browserName: 'chrome',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
-                '--start-maximized',
                 '--no-sandbox',
                 '--disable-dev-shm-usage',
                 '--disable-web-security',
-                '--disable-features=VizDisplayCompositor'
+                '--disable-features=VizDisplayCompositor',
+                '--start-maximized'
             ]
         }
     }],
 
+    //
+    // ===================
+    // Test Configurations
+    // ===================
     logLevel: 'info',
+    baseUrl: 'https://accounts.staging.cartpanda.com/login',
 
+    // Use DevTools instead of chromedriver
+    services: ['devtools'],
+
+    //
+    // Framework
     framework: 'cucumber',
 
     cucumberOpts: {
-        require: ['./features/step-definitions/**/*.js'],
-        timeout: 60000
+        require: fs.readdirSync(path.join(__dirname, './features/step-definitions'))
+            .filter(file => file.endsWith('.js'))
+            .map(file => path.join(__dirname, './features/step-definitions', file)),
+        timeout: 60000,
+        ignoreUndefinedDefinitions: false,
+        backtrace: false,
+        requireModule: [],
+        dryRun: false,
+        failFast: false,
+        format: ['pretty'],
+        snippets: true,
+        source: true,
+        strict: true,
+        tagExpression: '',
     },
 
+    //
+    // ===================
+    // Reporters
+    // ===================
     reporters: [
         'spec',
         ['allure', {
@@ -40,38 +77,34 @@ exports.config = {
         }]
     ],
 
-    baseUrl: 'https://accounts.staging.cartpanda.com/login',
-
-    before: async function () {
-        await browser.maximizeWindow();
+    //
+    // ===================
+    // Hooks
+    // ===================
+    beforeScenario: async function (world) {
+        console.log(`Running scenario: ${world.pickle.name}`);
+        await browser.setWindowSize(1920, 1080);
     },
 
-    /**
-     * 🔴 Slack Alert on Failed Scenario (Cucumber Correct Hook)
-     */
-    afterScenario: async function (world, result, context) {
-        if (!result.passed) {
-            await sendSlack(`
-🔴 SCENARIO FAILED
-Feature: ${world.gherkinDocument.feature.name}
-Scenario: ${world.pickle.name}
-Error: ${result.error?.message || "Step failure occurred"}
-            `);
+    afterStep: async function (step, context, { error }) {
+        if (error) {
+            const screenshot = await browser.takeScreenshot();
+            allure.addAttachment('Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
         }
     },
 
-    /**
-     * 🚀 Slack Final Execution Summary
-     */
-    onComplete: async function (exitCode, config, capabilities, results) {
+    afterScenario: async function (world, result) {
+        console.log(`Scenario completed with status: ${result.status}`);
+        const screenshot = await browser.takeScreenshot();
+        allure.addAttachment('End of Scenario Screenshot', Buffer.from(screenshot, 'base64'), 'image/png');
+    },
 
-        const status = exitCode === 0 ? "✅ PASSED" : "❌ FAILED";
-
-        await sendSlack(`
-🚀 Pandacart Automation Finished
-Status: ${status}
-Specs Run: ${results.finished}
-Failures: ${results.failed}
-        `);
+    onComplete: function () {
+        const allureEnvPath = path.resolve('./allure-results/environment.properties');
+        const envData =
+            `BROWSER=Chrome\n` +
+            `ENVIRONMENT=Staging\n` +
+            `BASE_URL=${this.baseUrl}\n`;
+        fs.writeFileSync(allureEnvPath, envData);
     }
 };

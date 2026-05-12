@@ -49,11 +49,12 @@ class LoginPage extends BasePage {
         await selectstore.click();
     }
 
-    async dashBoardPage() {
-        const letsStartHeading = await $("//h4[contains(@class,'mb-3') and contains(normalize-space(),'Welcome to Cartpanda')]");
-        await expect(letsStartHeading).toBeDisplayed();
+  async dashBoardPage() {
+        // Wait for max 45s for dashboard header to appear
+        const dashboardHeader = await $("//div[@class='welcome-title' and text()='Welcome, Zubair!']");
+        await dashboardHeader.waitForDisplayed({ timeout: 45000 });
+        return dashboardHeader;
     }
-    
 //    async handleCloudflareVerification() {
 //     try {
 //         // Look for Cloudflare challenge messages

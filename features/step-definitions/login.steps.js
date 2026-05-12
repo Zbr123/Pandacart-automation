@@ -85,11 +85,19 @@ Then("I should see log into your account text", async () => {
 });
 
 Then("I should see Dashboard Page", async () => {
-    await LoginPage.dashBoardPage();
-    await browser.pause(7000);
+    // 1️⃣ Wait for staff invitation message (if this step is after add staff)
+    try {
+        await LoginPage.staffInvitationMessage();
+    } catch (e) {
+        console.log("Staff invitation message not found, continuing to dashboard check...");
+    }
+
+    // 2️⃣ Wait for Dashboard page
+    const dashboardHeader = await LoginPage.dashBoardPage();
+    expect(await dashboardHeader.isDisplayed()).toBe(true);
+
+    console.log("Dashboard page loaded successfully ✅");
 });
-
-
 
 
 
